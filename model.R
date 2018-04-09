@@ -4,29 +4,29 @@ growth = function(t, y, params) {
   with(as.list(c(params,y)), {
     ## function values
     zigma = P+F+K+V
-    temp  = -0.3485+0.033054*t #For temp 10-30 grader. Ellers død?
+#    temp  = -0.3485+0.033054*t #For temp 10-30 grader. Ellers død?
     rho   = 143.23-.144*t      # food consumed vs.Density pr dm^2
+temp = 20
+    f     = density+temp+zigma
+    g     = temp+P/zigma
+    h     = temp+F/zigma+K/zigma+V/zigma
+    i     = temp+K/zigma+V/zigma
+    j     = temp+H+V/zigma
 
-    f     = density*temp*zigma
-    g     = temp*P/zigma
-    h     = temp*F/zigma*K/zigma*V/zigma
-    i     = temp*K/zigma*V/zigma
-    j     = temp*H*V/zigma
+    pi = pp + f
+    fi = fp + f
+    ki = kp + f
 
-    pi = pp * f
-    fi = fp * f
-    ki = kp * f
-
-    pa    = temp*b*zigma
-    fa    = temp*b*zigma
-    ka    = temp*b*zigma
+    pa    = temp+b+zigma
+    fa    = temp+b+zigma
+    ka    = temp+b+zigma
 
     ## derivatives
     dPx   = pi-pa
     dFx   = fi-fa
     dKx   = ki-ka
 
-    dP    = pa*g
+    dP    = pa+g
     dUx   = g
     dF    = fa-h
     dK    = ka+h-i
