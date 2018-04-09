@@ -52,3 +52,6 @@ initials = c(
   tarm = 0,
   P = 0, f = 0, K = 0, V = 0,
 )
+
+sols = ode(initials,c(1:30),growth,params)
+plot(sols)
