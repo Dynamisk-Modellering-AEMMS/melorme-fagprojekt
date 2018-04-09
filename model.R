@@ -33,30 +33,35 @@ sir_model = function (current_timepoint, state_values, parameters)
     as.list (parameters),     # variable names within parameters can be used 
     {
       # compute derivatives
-      nb=sb+eb+ab+ib+ibm+rb
-      nw=sw+ew+aw+iw+iwm+rw
-      nv=sv+ev+iv
+      pa   = (t*b*tarm*zigma)
+      fa   = t*b*tarm*zigma
+      ka   = t*b*tarm*zigma
+      fptz = p*t*zigma
+      g    = t*P/zigma
+      h    = t*f/zigma*k/zigma*v/zigma
+      i    = t*k/zigma*v/zigma
+      j    = t*H*v/zigma
       
-      lambdaw=(betaw*bv*iv)/nw
-      lambdab=(ny*betab*bv*iv)/nb
-      lambdav=betav*bv*((iw+Rhow*aw+ny*(ib+Rhob*ab)/(nw+ny*nb)))
+
       
+      zigma = p+f+k+v
+      dPx = pi-pa
+      dFx = fi-fa
+      dKx = ki-ka
       
-      dsb=pib-qa*pib*aw-qi*pib*iw-qr*pib*rw-lambdab*sb-(alpha+myb)*sb
-      deb=lambdab*sb-(alpha*rhob+myb)*eb
-      dab=qa*pib*aw+(1-p)*rhob*eb-(alpha+gammab+myb)*ab
-      dib=qi*pib*iw+p*rhob*eb-(alpha+gammab+myb)*ib
-      dibm=r*qr*pib*rw-(alpha*myb)*ibm
-      drb=(1-r)*qr*pib*rw+gammab*ab+gammab*ib-(alpha+myb)*rb
-      dsw=alpha*sb-lambdaw*sw-myw*sw
-      dew=lambdaw*sw-(rhow+myw)*sw
-      daw=(1-p)*rhow*ew-(gammaw+myw)*aw
-      diw=p*rhow*ew-(gammaw+myw)*iw
-      diwm=alpha*ibm-myw*iwm
-      drw=alpha*rb+gammaw*aw+gammaw*iw-myw*rw
-      dsv=piv-lambdav*sv-(myv+rhov)*ev
-      dev=lambdav*sv-(myv+rhov)*ev
-      div=rhov*ev-myv*iv
+      pp = pi/(pi+fi+ki)
+      fp = fi/(pi+fi+ki)
+      kp = ki/(pi+fi+ki)
+      
+      #1 = pp+fp+kp
+      dtarm = fptz -(pi+fi+ki)
+      #dtarm = 0
+      dP = pa*g
+      dUx = g
+      dF = fa-h
+      dk = ka+h-i
+      dv = i-j
+      dvx = j
       
       
       
