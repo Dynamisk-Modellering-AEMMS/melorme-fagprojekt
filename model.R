@@ -3,11 +3,11 @@ library("deSolve")
 growth = function(t, y, params) {
   with(as.list(c(params,y)), {
     ## function values
-
+    zigma = P+F+K+V
     temp  = -0.3485+0.033054*t #For temp 10-30 grader. Ellers død?
     rho   = 143.23-.144*t      # food consumed vs.Density pr dm^2
 
-    f  = density*temp*zigma
+    f     = density*temp*zigma
     g     = temp*P/zigma
     h     = temp*F/zigma*K/zigma*V/zigma
     i     = temp*K/zigma*V/zigma
@@ -17,11 +17,9 @@ growth = function(t, y, params) {
     fi = fp * f
     ki = kp * f
 
-    pa    = temp*b*tarm*zigma
-    fa    = temp*b*tarm*zigma
-    ka    = temp*b*tarm*zigma
-
-    zigma = P+F+K+V
+    pa    = temp*b*zigma
+    fa    = temp*b*zigma
+    ka    = temp*b*zigma
 
     ## derivatives
     dPx   = pi-pa
@@ -44,15 +42,16 @@ params = c(
   temp = 20,
   b = 0,
   density = 10,
+  H = 0.4,
 
   pp = 0.2,
   fp = 0.3,
-  fk = 0.5,
+  kp = 0.5
 )
 
 initials = c(
   Px = 0, Fx = 0, Kx = 0, Ux = 0, Vx = 0,
-  P = 0, f = 0, K = 0, V = 0,
+  P = 0, f = 0, K = 0, V = 0
 )
 
 sols = ode(initials,c(1:30),growth,params)
