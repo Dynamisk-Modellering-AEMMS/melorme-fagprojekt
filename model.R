@@ -10,21 +10,19 @@ growth = function(t, y, params) {
     pa    = (temp*b*tarm*zigma)
     fa    = temp*b*tarm*zigma
     ka    = temp*b*tarm*zigma
-    fptz  = p*temp*zigma
+    f  = density*temp*zigma
     g     = temp*P/zigma
     h     = temp*F/zigma*K/zigma*V/zigma
     i     = temp*K/zigma*V/zigma
     j     = temp*H*V/zigma
+
+    pi = pp * f
+    fi = fp * f
+    ki = kp * f
+
     zigma = P+F+K+V
 
-    pp    = pi/(pi+fi+ki)
-    fp    = fi/(pi+fi+ki)
-    kp    = ki/(pi+fi+ki)
-
     ## derivatives
-    #1    = pp+fp+kp
-    dtarm = fptz -(pi+fi+ki)
-    #dtarm  = 0
     dPx   = pi-pa
     dFx   = fi-fa
     dKx   = ki-ka
@@ -45,6 +43,7 @@ growth = function(t, y, params) {
 params = c(
   temp = 20,
   b = 0,
+  density = 10,
 
   pp = 0.2,
   fp = 0.3,
