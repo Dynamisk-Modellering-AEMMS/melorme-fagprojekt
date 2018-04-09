@@ -3,6 +3,10 @@ library("deSolve")
 growth = function(t, y, params) {
   with(as.list(c(params,y)), {
     ## function values
+
+    temp  = -0.3485+0.033054*t #For temp 10-30 grader. Ellers død?
+    rho   = 143.23-.144*t      # food consumed vs.Density pr dm^2
+
     pa    = (temp*b*tarm*zigma)
     fa    = temp*b*tarm*zigma
     ka    = temp*b*tarm*zigma
