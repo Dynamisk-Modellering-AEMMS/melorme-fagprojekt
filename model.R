@@ -7,24 +7,23 @@ growth = function(t, y, params) {
     temp  = -0.3485+0.033054*t #For temp 10-30 grader. Ellers død?
     rho   = 143.23-.144*t      # food consumed vs.Density pr dm^2
 
-    pa    = (temp*b*tarm*zigma)
-    fa    = temp*b*tarm*zigma
-    ka    = temp*b*tarm*zigma
-    fptz  = density*temp*zigma
+    f  = density*temp*zigma
     g     = temp*P/zigma
     h     = temp*F/zigma*K/zigma*V/zigma
     i     = temp*K/zigma*V/zigma
     j     = temp*H*V/zigma
+
+    pi = pp * f
+    fi = fp * f
+    ki = kp * f
+
+    pa    = temp*b*tarm*zigma
+    fa    = temp*b*tarm*zigma
+    ka    = temp*b*tarm*zigma
+
     zigma = P+F+K+V
 
-    pp    = pi/(pi+fi+ki)
-    fp    = fi/(pi+fi+ki)
-    kp    = ki/(pi+fi+ki)
-
     ## derivatives
-    #1    = pp+fp+kp
-    dtarm = fptz -(pi+fi+ki)
-    #dtarm  = 0
     dPx   = pi-pa
     dFx   = fi-fa
     dKx   = ki-ka
