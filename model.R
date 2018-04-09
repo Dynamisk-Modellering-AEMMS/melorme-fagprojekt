@@ -41,3 +41,12 @@ growth = function(t, y, params) {
                   dP, dF, dK, dV)))
   })
 }
+
+params = c(
+  temp = 20,
+  b = 0,
+
+  pp = 0.2,
+  fp = 0.3,
+  fk = 0.5,
+)
