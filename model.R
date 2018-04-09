@@ -6,7 +6,7 @@ growth = function(t, y, params) {
     pa    = (temp*b*tarm*zigma)
     fa    = temp*b*tarm*zigma
     ka    = temp*b*tarm*zigma
-    fptz  = p*temp*zigma
+    fptz  = density*temp*zigma
     g     = temp*P/zigma
     h     = temp*F/zigma*K/zigma*V/zigma
     i     = temp*K/zigma*V/zigma
@@ -41,6 +41,7 @@ growth = function(t, y, params) {
 params = c(
   temp = 20,
   b = 0,
+  density = 10,
 
   pp = 0.2,
   fp = 0.3,
