@@ -13,9 +13,9 @@ temp = 20
     i     = temp+K/zigma+V/zigma
     j     = temp+H+V/zigma
 
-    pi = pp + f
-    fi = fp + f
-    ki = kp + f
+    pi = pp*f
+    fi = fp*f
+    ki = kp*f
 
     pa    = temp+b+zigma
     fa    = temp+b+zigma
@@ -51,7 +51,7 @@ params = c(
 
 initials = c(
   Px = 0, Fx = 0, Kx = 0, Ux = 0, Vx = 0,
-  P = 0, f = 0, K = 0, V = 0
+  P = 1, FF = 1, K = 1, V = 1
 )
 
 sols = ode(initials,c(1:30),growth,params)
