@@ -52,8 +52,8 @@ params = c(
 )
 
 initials = c(
-  Px = 0, Fx = 0, Kx = 0, Ux = 0, Vx = 0,
-  tarm = 0,
+  Px = 0, Fx = 0, Kx = 0, Ux = 0,
+  Vx = 0, tarm = 0,
   P = 0, f = 0, K = 0, V = 0,
 )
 
