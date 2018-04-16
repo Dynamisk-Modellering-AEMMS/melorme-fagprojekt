@@ -8,32 +8,32 @@ growth = function(t, y, params) {
     print(c(P,FF,K,V))
     print(c(P*100/zigma,FF*100/zigma,K*100/zigma,V*100/zigma))
     f = max(zigma,0)+1
-    g     = log(exp((P-0.46*zigma)/5)+1)*5
+    g = log(exp((P-0.46*zigma)/5)+1)*5
     print(g)
-    h     = 0
-    #i     = -0.3485+0.033054*temp #For temp 10-30 grader. Ellers død?
+    h = 0
+    #i = -0.3485+0.033054*temp #For temp 10-30 grader. Ellers død?
     i = 0
-    j     = V/(zigma*H)
+    j = V/(zigma*H)
 
     pi = pp*f
     fi = fp*f
     ki = kp*f
 
-    pa    = pi
-    fa    = fi
-    ka    = ki
+    pa = pi
+    fa = fi
+    ka = ki
 
     ## derivatives
-    dPx   = pi-pa
-    dFx   = fi-fa
-    dKx   = ki-ka
+    dPx = pi-pa
+    dFx = fi-fa
+    dKx = ki-ka
 
-    dP    = pa-g
-    dUx   = g
-    dF    = fa-h
-    dK    = ka+h-i
-    dV    = i-j
-    dVx   = j
+    dP = pa-g
+    dUx = g
+    dF = fa-h
+    dK = ka+h-i
+    dV = i-j
+    dVx = j
 
     return(list(c(dPx, dFx, dKx, dUx, dVx,
                   dP, dF, dK, dV)))
