@@ -4,10 +4,15 @@ growth = function(t, y, params) {
   with(as.list(c(params,y)), {
     ## function values
     zigma = P+FF+K+V
-    f     = K/1000*(143.23-.144*density)      # food consumed vs.Density pr dm^2
-    g     = log(exp(P-200)+1)
+    #f = K/100*(143.23-.144*density)      # food consumed vs.Density pr dm^2
+    print(c(P,FF,K,V))
+    print(c(P*100/zigma,FF*100/zigma,K*100/zigma,V*100/zigma))
+    f = max(zigma,0)+1
+    g     = log(exp((P-0.46*zigma)/5)+1)*5
+    print(g)
     h     = 0
-    i     = -0.3485+0.033054*temp #For temp 10-30 grader. Ellers død?
+    #i     = -0.3485+0.033054*temp #For temp 10-30 grader. Ellers død?
+    i = 0
     j     = V/(zigma*H)
 
     pi = pp*f
