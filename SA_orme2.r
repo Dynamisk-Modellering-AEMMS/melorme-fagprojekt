@@ -11,38 +11,37 @@ growth = function(t, y, params) {
     fCombust = 0
     radius = (zigma/(10*pi))^(1/3) # approx radius (as if cylinder of water 5x as long as the diameter)
     j = (0.22 * pi * radius^2) * # surface area
-    1440 * # minutes/day
-    248.33265 * # constant
-    (V/zigma - H) * # humidity difference, diffusion boundary assumed linear, replaces (1-H) in eq
-    temp^(-1.4) * sqrt(vAir) * Pwater(temp)
-
+      1440 * # minutes/day
+      248.33265 * # constant
+      (V/zigma - H) * # humidity difference, diffusion boundary assumed linear, replaces (1-H) in eq
+      temp^(-1.4) * sqrt(vAir) * Pwater(temp)
+    
     lumenSize = 0.15*zigma
-
+    
     ppl = Pl/lumenSize
     fpl = Fl/lumenSize
     kpl = Kl/lumenSize
-
+    
     pa = Dp * Pl/lumenSize
     fa = Df * Fl/lumenSize
-    ka = Dk * Kl/lumenSize # / lumenSize [mg]
-
+    ka = (36/5) * Kl / lumenSize # (0.015umol/min)/(3 mol/L) ⋅ Kl [mg] ⋅ 1 kg/L / lumenSize [mg]
+    
     ## derivatives
     dPx = ppl*f
     dFx = fpl*f
     dKx = kpl*f
-
+    
     dP = pa-g
     dUx = 0.5*g
     dF = fa + h - fCombust
     dK = ka - h - kCombust
     dV = 0.5*g + kCombust + fCombust - j
     dVx = j
-
+    
     dPl = pp*f - ppl*f - pa
     dFl = fp*f - fpl*f - fa
     dKl = kp*f - kpl*f - ka
-    print(j)
-
+    
     return(list(c(dPx, dFx, dKx, dUx, dVx,
                   dP, dF, dK, dV,
                   dPl, dFl, dKl),
@@ -56,10 +55,10 @@ Pwater = function(temp) { # Antoine ligningen
     + 8.07131 # A
     - (
       1730.63/ # B
-      (233.426 # C
-      + temp) # [temp] = °C
+        (233.426 # C
+         + temp) # [temp] = °C
     )
-    )
+  )
 }
 
 params = c(
@@ -67,13 +66,12 @@ params = c(
   b = 0,
   density = 50,
   H = 0.3,
-
+  
   pressure = 101325, # Pa
   vAir = 0.15, # m/s
-  Dp = 4, # gæt
-  Df = 4, # gæt
-  Dk = 7.2 # (0.015umol/min)/(3 mol/L) * 1 kg/L omregnet til mg/d
-
+  Dp = 1,
+  Df = 1,
+  
   pp = 0.2,
   fp = 0.4,
   kp = 0.4
@@ -87,3 +85,49 @@ initials = c(
 
 sols = ode(initials,c(1:84),growth,params)
 plot(sols)
+
+
+# Scatterplot
+
+N.iter <- 100
+Dp.list <- runif(N.iter,min=1,max=10)
+Df.list <- runif(N.iter,min=1,max=10)
+P.max <- numeric(N.iter)
+FF.max <- numeric(N.iter)
+K.max <- numeric(N.iter)
+Pl.min <- numeric(N.iter)
+Fl.min <- numeric(N.iter)
+
+for ( i in 1:N.iter){
+  # simulate the epidemic
+    parms <- c(
+      temp = 20,
+      b = 0,
+      density = 50,
+      H = 0.3,
+      
+      pressure = 101325, # Pa
+      vAir = 0.15, # m/s
+      Dp = Dp.list[i],
+      Df = Df.list[i],
+      
+      pp = 0.2,
+      fp = 0.4,
+      kp = 0.4
+  )
+  output <- ode(initials,times = c(1:84), growth, parms)
+  # antal syge p� samme tid
+  P.max[i] <- output[84,'P']
+  # t.max
+  FF.max[i] <- output[84,'FF']
+  # totale antal syge
+  K.max[i] <- output[84,'K']
+  Pl.min[i] <- min(output[,'Pl'])
+  Fl.min[i] <- min(output[,'Fl'])
+}
+
+GSA.res <- data.frame(Dp=Dp.list,Df=Df.list,P.max,FF.max,K.max,Pl.min,Fl.min)
+pairs(GSA.res)
+
+# Andre metoder f�lger...
+
