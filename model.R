@@ -72,7 +72,7 @@ params = c(
   vAir = 0.15, # m/s
   Dp = 4, # gæt
   Df = 4, # gæt
-  Dk = 7.2 # (0.015umol/min)/(3 mol/L) * 1 kg/L omregnet til mg/d
+  Dk = 7.2, # (0.015umol/min)/(3 mol/L) * 1 kg/L omregnet til mg/d
 
   pp = 0.2,
   fp = 0.4,
