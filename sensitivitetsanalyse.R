@@ -84,10 +84,15 @@ plot(sols)
 # juster hver parameter op eller ned fra mean
 params <- c(temp.value=temp*1.25,
             b = 0,
-            density.value = density*1.25,,
+            density.value = density*1.25,
             H = 0.2,
             pressure = 101325, # Pa
-            vAir = 0.15, # m/s)
+            vAir = 0.15,
+
+            pp = 0.2,
+            fp = 0.4,
+            kp = 0.4
+) # m/s)
 
 output <- ode(y=initials,times = c(1:84),func= growth, parms = params)
 # antal syge på samme tid
@@ -101,9 +106,7 @@ output <- ode(y=initials,times = c(1:84),func= growth, parms = params)
 
 
 # Scatterplot
-
-#iter = 1000
-
+iter = 1000
 temp.list <- runif(1000,min=10,max=30)
 density.list <- runif(1000,min=10,max=100)
 FF.max <- numeric(1000)
@@ -117,7 +120,11 @@ for ( i in 1:1000){
               denisity = density.list[i],
               H = 0.2,
               pressure = 101325,
-              vAir = 0.15)
+              vAir = 0.15,
+              pp = 0.2,
+              fp = 0.4,
+              kp = 0.4
+  )
   output <- ode(y=initials,times = c(1:84),func= growth, parms = params)
   # antal syge på samme tid
   FF.max[i] <- max(output[,'FF'])
