@@ -5,14 +5,15 @@ growth = function(t, y, params) {
     ## function values
     zigma = P+FF+K+V
     f = (zigma/80)*(637.27 - 0.305*density)/12/7 # [density] = 1/(dm^2), (zigma/80) er et gæt for hver meget mere større larver spiser
-    print(c(P,FF,K,V))
-    print(c(P*100/zigma,FF*100/zigma,K*100/zigma,V*100/zigma))
-    #f = max(zigma,0)+1
     g = log(exp((P-0.46*zigma))+1) # "gæt", sørger for maks 46% proteinindhold
-    print(g)
     h = 0
     i = -0.3485+0.033054*temp #For temp 10-30 grader. Ellers død?
-    j = V/(zigma*H)
+    radius = (zigma/(10*pi))^(1/3) # approx radius (as if cylinder of water 5x as long as the diameter)
+    j = 3.4 * #(0.22 * pi * radius^2) * # surface area
+    1440 * # minutes/day
+    248.33265 * # constant
+    (V/zigma - H) * # humidity difference, diffusion boundary assumed linear, replaces (1-H) in eq
+    temp^(-1.4) * sqrt(vAir) * Pwater(temp)
 
     pi = pp*f
     fi = fp*f
@@ -28,10 +29,10 @@ growth = function(t, y, params) {
     dKx = ki-ka
 
     dP = pa-g
-    dUx = g
+    dUx = 0.5*g
     dF = fa-h
     dK = ka+h-i
-    dV = i-j
+    dV = 0.5*g + i - j
     dVx = j
 
     return(list(c(dPx, dFx, dKx, dUx, dVx,
@@ -39,15 +40,29 @@ growth = function(t, y, params) {
   })
 }
 
+Pwater = function(temp) { # Antoine ligningen
+  10^(
+    2.124903 # for at omregne til Pascal
+    + 8.07131 # A
+    - (
+      1730.63/ # B
+      (233.426 # C
+      + temp) # [temp] = °C
+    )
+    )
+}
+
 params = c(
   temp = 20,
   b = 0,
   density = 50,
-  H = 0.4,
+  H = 0.2,
+  pressure = 101325, # Pa
+  vAir = 0.15, # m/s
 
   pp = 0.2,
-  fp = 0.3,
-  kp = 0.5
+  fp = 0.4,
+  kp = 0.4
 )
 
 initials = c(
