@@ -24,7 +24,7 @@ growth = function(t, y, params) {
 
     pa = Dp * Pl/lumenSize
     fa = Df * Fl/lumenSize
-    ka = (36/5) * Kl / lumenSize # (0.015umol/min)/(3 mol/L) ⋅ Kl [mg] ⋅ 1 kg/L / lumenSize [mg]
+    ka = Dk * Kl/lumenSize # / lumenSize [mg]
 
     ## derivatives
     dPx = ppl*f
@@ -70,8 +70,9 @@ params = c(
 
   pressure = 101325, # Pa
   vAir = 0.15, # m/s
-  Dp = 1,
-  Df = 1,
+  Dp = 4, # gæt
+  Df = 4, # gæt
+  Dk = 7.2 # (0.015umol/min)/(3 mol/L) * 1 kg/L omregnet til mg/d
 
   pp = 0.2,
   fp = 0.4,
