@@ -48,7 +48,7 @@ growth = function(t, y, params) {
     return(list(c(dPx, dFx, dKx, dUx, dVx,
                   dP, dF, dK, dV,
                   dPl, dFl, dKl),
-                c(f = f, pa = pa, fa = fa, ka = ka, zigma = zigma, kCombust = kCombust, fCombust = fCombust, j = j, pp = 100*P/zigma, kp = 100*K/zigma, fp = 100*FF/zigma, vp = 100*V/zigma, ppt = 100*P/(P+K+FF), kpt = 100*K/(P+K+FF), fpt = 100*FF/(P+K+FF), urp = Ux/(Px+Fx+Kx+Ux))))
+                c(f = f, pa = pa, fa = fa, ka = ka, zigma = zigma, kCombust = kCombust, fCombust = fCombust, j = j, pp = 100*P/zigma, kp = 100*K/zigma, fp = 100*FF/zigma, vp = 100*V/zigma, ppt = 100*P/(P+K+FF), kpt = 100*K/(P+K+FF), fpt = 100*FF/(P+K+FF), urp = Ux/(Px+Fx+Kx+Ux), growthrate=dK+dF+dK)))
   })
 }
 
@@ -87,6 +87,6 @@ initials = c(
   Pl = 0.2, Fl = 0.3, Kl = 0.5
 )
 
-sols = ode(initials,c(1:28),growth,params)
+sols = ode(initials,c(1:84),growth,params)
 plot(sols)
-print(sols[28,])
+print(sols[84,])
