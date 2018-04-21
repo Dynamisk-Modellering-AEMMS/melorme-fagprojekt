@@ -4,10 +4,10 @@ growth = function(t, y, params) {
   with(as.list(c(params,y)), {
     ## function values
     zigma = P+FF+K+V
-    f = (zigma/80)*(637.27 - 0.305*density)/12/7 # [density] = 1/(dm^2), (zigma/80) er et gæt for hver meget mere større larver spiser
-    g = log(exp((P-0.46*zigma))+1) # "gæt", sørger for maks 46% proteinindhold
+    f = (zigma/80)*(637.27 - 0.305*density)/12/7 # [density] = 1/(dm^2), (zigma/80) er et gÃ¦t for hver meget mere stÃ¸rre larver spiser
+    g = max((P-0.46*zigma),0) # "gÃ¦t", sÃ¸rger for maks 46% proteinindhold
     h = 0
-    i = -0.3485+0.033054*temp #For temp 10-30 grader. Ellers død?
+    i = -0.3485+0.033054*temp #For temp 10-30 grader. Ellers dÃ¸d?
     radius = (zigma/(10*pi))^(1/3) # approx radius (as if cylinder of water 5x as long as the diameter)
     j = 3.4 * #(0.22 * pi * radius^2) * # surface area
     1440 * # minutes/day
@@ -47,7 +47,7 @@ Pwater = function(temp) { # Antoine ligningen
     - (
       1730.63/ # B
       (233.426 # C
-      + temp) # [temp] = °C
+      + temp) # [temp] = Â°C
     )
     )
 }
