@@ -67,7 +67,6 @@ Pwater = function(temp) { # Antoine ligningen
 
 params = c(
   temp = 28,
-  b = 0,
   density = 50,
   H = 0.65,
 
