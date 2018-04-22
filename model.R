@@ -14,9 +14,9 @@ growth = function(t, y, params) {
     radius = (zigma/(10*pi))^(1/3) # approx radius (as if cylinder of water 5x as long as the diameter)
     j = (0.22 * pi * radius^2) * # surface area
     1440 * # minutes/day
-    248.33265 * # constant
+    0.89750342 *
     (V/zigma - H) * # humidity difference, diffusion boundary assumed linear, replaces (1-H) in eq
-    temp^(-1.4) * sqrt(vAir) * Pwater(temp)
+    (temp + 273.15)^(-1.4) * sqrt(vAir) * Pwater(temp)
 
     lumenSize = 0.15*zigma
 
