@@ -70,7 +70,6 @@ params = c(
   density = 50, # larvae / dm^2
   H = 0.65,
 
-  pressure = 101325, # Pa
   vAir = 0.15, # m/s
   Dp = 35, # gæt
   Df = 4, # gæt
