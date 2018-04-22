@@ -64,7 +64,6 @@ Pwater = function(temp) { # Antoine ligningen
 
 params = c(
   temp = 20,
-  b = 0,
   density = 50,
   H = 0.3,
 
@@ -96,7 +95,7 @@ Kmax = c(NULL,length = length(params)-1)
 
 x = 1.25
 n=1
-for (n in range(1:length(params)-1)){
+for (n in range(1:length(params))){
   params[n]=params[n]*x
   output <- ode(y=initials,times = c(1:84),func= growth, parms = params)
   # antal syge på samme tid
