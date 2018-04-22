@@ -97,7 +97,7 @@ print(sols[84,])
 mi = c(0,10,0,101325/2,0.001,1,1,1,0,0,0)
 ma = c(100,100,1,101325*2,10,100,100,100,1,1,1)
 attribute.names = c('temp','density','H','pressure','vAir','Dp','Df','Dk','pp','fp','kp')
-N.iter <- 12
+N.iter <- 1000
 P.max <- matrix(data = NA,nrow = length(params),ncol = N.iter)
 FF.max <- matrix(data = NA,nrow = length(params),ncol = N.iter)
 K.max <- matrix(data = NA,nrow = length(params),ncol = N.iter)
