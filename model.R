@@ -67,7 +67,7 @@ Pwater = function(temp) { # Antoine ligningen
 
 params = c(
   temp = 28,
-  density = 50,
+  density = 50, # larvae / dm^2
   H = 0.65,
 
   pressure = 101325, # Pa
