@@ -106,7 +106,7 @@ param.list = matrix(data = NA,nrow = length(params),ncol = N.iter)
 parms = vector("numeric", length = length(params))
 GSA.res = matrix(data = NA,nrow = length(params),ncol = N.iter)
 #output = matrix(data = NA,nrow = length(params),ncol = N.iter)
-j = 1
+#j = 1
 #loop param
 set.seed(3)
 for (j in 1:length(params)){
@@ -114,18 +114,19 @@ for (j in 1:length(params)){
 
   for ( i in 1:N.iter){
     # simulate the epidemic
+    parms = params
     parms[j] = param.list[j,i]
-    names(parms)<-attribute.names
+    #names(parms)<-attribute.names
     output <- ode(initials,times = c(1:84), growth, parms)
     # antal syge på samme tid
-    P.max[j,i] <- max(output[,'P'])
+    P.max[j,i] <- output[84,'P']
     # t.max
-    FF.max[j,i] <- max(output[,'FF'])
+    FF.max[j,i] <- output[84,'FF']
     # totale antal syge
-    K.max[j,i] <- max(output[,'K'])
+    K.max[j,i] <- output[84,'K']
   }
   GSA.res <- data.frame(param.list[j,],P.max[j,],FF.max[j,],K.max[j,])
-  names(GSA.res) <- c(attribute.names[j],"P max","F max", "K max")
+  names(GSA.res) <- c(attribute.names[j],"P end","F end", "K end")
 
   pairs(GSA.res)
 }
