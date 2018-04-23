@@ -5,16 +5,18 @@ growth = function(t, y, params) {
     ## function values
     zigma = P+FF+K+V
     f = (zigma/80)*(637.27 - 0.305*density)/12/7 # [density] = 1/(dm^2), (zigma/80) er et gæt for hver meget mere større larver spiser
-    g = max((P-0.46*zigma),0) # "gæt", sørger for maks 46% proteinindhold
-    h = 0
-    kCombust = -0.3485+0.033054*temp #For temp 10-30 grader. Ellers død?
-    fCombust = 0
+    g = 0.125 * P # "gæt", sørger for maks 46% proteinindhold
+    kCombustC = 0.08473955701/0.5
+    h = kCombustC/2*K
+    #kCombust = -0.3485+0.033054*temp #For temp 10-30 grader. Ellers død?
+    kCombust = kCombustC/2*K
+    fCombust = 0.05298229217*FF
     radius = (zigma/(10*pi))^(1/3) # approx radius (as if cylinder of water 5x as long as the diameter)
     j = (0.22 * pi * radius^2) * # surface area
       1440 * # minutes/day
-      248.33265 * # constant
+      0.89750342 *
       (V/zigma - H) * # humidity difference, diffusion boundary assumed linear, replaces (1-H) in eq
-      temp^(-1.4) * sqrt(vAir) * Pwater(temp)
+      (temp + 273.15)^(-1.4) * sqrt(vAir) * Pwater(temp)
 
     lumenSize = 0.15*zigma
 
@@ -24,7 +26,7 @@ growth = function(t, y, params) {
 
     pa = Dp * Pl/lumenSize
     fa = Df * Fl/lumenSize
-    ka = (36/5) * Kl / lumenSize # (0.015umol/min)/(3 mol/L) ⋅ Kl [mg] ⋅ 1 kg/L / lumenSize [mg]
+    ka = Dk * Kl/lumenSize # / lumenSize [mg]
 
     ## derivatives
     dPx = ppl*f
@@ -35,7 +37,8 @@ growth = function(t, y, params) {
     dUx = 0.5*g
     dF = fa + h - fCombust
     dK = ka - h - kCombust
-    dV = 0.5*g + kCombust + fCombust - j
+    #dV = 0.5*g + kCombust + fCombust - j
+    dV = 0.5*g + (0.02108 * zigma) - j # (kCombust + fCombust) = 0.021808 uden skelnen, desværre
     dVx = j
 
     dPl = pp*f - ppl*f - pa
@@ -45,8 +48,8 @@ growth = function(t, y, params) {
 
     return(list(c(dPx, dFx, dKx, dUx, dVx,
                   dP, dF, dK, dV,
-                  dPl, dFl, dKl),
-                c(f = f, pa = pa, fa = fa, ka = ka, zigma = zigma, kCombust = kCombust, fCombust = fCombust, j = j, pp = P/zigma, kp = K/zigma, fp = FF/zigma, vp = V/zigma)))
+                  dPl, dFl, dKl, f, pa+fa+ka),
+                c(f = f, pa = pa, fa = fa, ka = ka, zigma = zigma, kCombust = kCombust, fCombust = fCombust, j = j, pp = 100*P/zigma, kp = 100*K/zigma, fp = 100*FF/zigma, vp = 100*V/zigma, ppt = 100*P/(P+K+FF), kpt = 100*K/(P+K+FF), fpt = 100*FF/(P+K+FF), urp = Ux/(Px+Fx+Kx+Ux), growthrate=dK+dF+dK)))
   })
 }
 
@@ -63,46 +66,53 @@ Pwater = function(temp) { # Antoine ligningen
 }
 
 params = c(
-  temp = 20,
+  temp = 28,
   density = 50,
-  H = 0.3,
+  H = 0.65,
 
   pressure = 101325, # Pa
   vAir = 0.15, # m/s
-  Dp = 1,
-  Df = 1,
+  Dp = 35, # gæt
+  Df = 4, # gæt
+  Dk = 7.2, # (0.015umol/min)/(3 mol/L) * 1 kg/L omregnet til mg/d
 
-  pp = 0.2,
-  fp = 0.4,
-  kp = 0.4
+  pp = 0.33,
+  fp = 0.06,
+  kp = 0.61
 )
 
 initials = c(
   Px = 0, Fx = 0, Kx = 0, Ux = 0, Vx = 0,
   P = 2, FF = 3, K = 5, V = 5,
-  Pl = 0.2, Fl = 0.3, Kl = 0.5
+  Pl = 0.2, Fl = 0.3, Kl = 0.5,
+  FoodConsumed = 0, FoodDigested = 0
 )
+#sols = ode(initials,c(1:84),growth,params)
+#plot(sols)
+#print(sols[84,])
 
-sols = ode(initials,c(1:84),growth,params)
-plot(sols)
-
-Pmax = c(NULL,length = length(params)-1)
-FFmax = c(NULL,length = length(params)-1)
-Kmax = c(NULL,length = length(params)-1)
+Pend = vector("numeric",length = length(params))
+FFend = vector("numeric",length = length(params))
+Kend = vector("numeric",length = length(params))
 
 # LOkal sensitivitet
 # juster hver parameter op eller ned fra mean
 
 x = 1.25
-n=1
-for (n in range(1:length(params))){
-  params[n]=params[n]*x
-  output <- ode(y=initials,times = c(1:84),func= growth, parms = params)
+for (n in 1:length(params)){
+  param=params
+  param[n]=param[n]/x
+  print(param)
+  output <- ode(y=initials,times = c(1:84),func= growth, parms = param)
   # antal syge p� samme tid
-  (Pmax[n] <- max(output[,'P']))
+  Pend[n] <- output[84,'P']
   # t.max
-  (FFmax[n] <- max(output[,'FF']))
+  FFend[n] <- output[84,'FF']
   # totale antal syge
-  (Kmax[n]<- max(output[,'K']))
+  Kend[n]<- output[84,'K']
 
 }
+
+plot(y=Pend,x  = c(1:n),type = "l")
+plot(y=FFend,x = c(1:n),type = "l")
+plot(y =Kend,x = c(1:n),type = "l")
