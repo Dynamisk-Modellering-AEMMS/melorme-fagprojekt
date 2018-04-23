@@ -14,9 +14,9 @@ growth = function(t, y, params) {
     radius = (zigma/(10*pi))^(1/3) # approx radius (as if cylinder of water 5x as long as the diameter)
     j = (0.22 * pi * radius^2) * # surface area
       1440 * # minutes/day
-      248.33265 * # constant
+      0.89750342 *
       (V/zigma - H) * # humidity difference, diffusion boundary assumed linear, replaces (1-H) in eq
-      temp^(-1.4) * sqrt(vAir) * Pwater(temp)
+      (temp + 273.15)^(-1.4) * sqrt(vAir) * Pwater(temp)
 
     lumenSize = 0.15*zigma
 
@@ -87,7 +87,6 @@ initials = c(
   Pl = 0.2, Fl = 0.3, Kl = 0.5,
   FoodConsumed = 0, FoodDigested = 0
 )
-
 #sols = ode(initials,c(1:84),growth,params)
 #plot(sols)
 #print(sols[84,])
@@ -100,13 +99,9 @@ Kend = vector("numeric",length = length(params))
 # juster hver parameter op eller ned fra mean
 
 x = 1.25
-
-
-
-
 for (n in 1:length(params)){
   param=params
-  param[n]=param[n]*x
+  param[n]=param[n]/x
   print(param)
   output <- ode(y=initials,times = c(1:84),func= growth, parms = param)
   # antal syge på samme tid
@@ -117,6 +112,7 @@ for (n in 1:length(params)){
   Kend[n]<- output[84,'K']
 
 }
+
 plot(y=Pend,x  = c(1:n),type = "l")
 plot(y=FFend,x = c(1:n),type = "l")
 plot(y =Kend,x = c(1:n),type = "l")
